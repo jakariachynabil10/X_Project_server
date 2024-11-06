@@ -11,27 +11,53 @@ datasource db {
 }
 
 model User {
-  id                 String     @id @default(uuid())
-  email              String     @unique
-  password           String
-  role               UserRole
-  needPasswordChange Boolean    @default(true)
-  status             UserStatus @default(ACTIVE)
-  createdAt          DateTime   @default(now())
-  updatedAt          DateTime   @updatedAt
+  id              String            @id @default(uuid())
+  name            String
+  email           String
+  password        String
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  AdoptionRequest AdoptionRequest[]
 
   @@map("users")
 }
 
-enum UserRole {
-  SUPER_ADMIN
-  ADMIN
-  DOCTOR
-  PATIENT
+model Pet {
+  id                   String            @id @default(uuid())
+  name                 String
+  species              String  
+  breed                String
+  age                  Int
+  size                 String
+  location             String
+  description          String
+  temperament          String
+  medicalHistory       String
+  adoptionRequirements String
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+  AdoptionRequest      AdoptionRequest[]
+
+  @@map("pets")
 }
 
-enum UserStatus {
-  ACTIVE
-  BLOCKED
-  DELETED
+model AdoptionRequest {
+  id                     String                @id @default(uuid())
+  userId                 String
+  petId                  String
+  status                 AdoptionRequestStatus @default(PENDING)
+  petOwnershipExperience String
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+  pet  Pet  @relation(fields: [petId], references: [id])
+
+  @@map("adoptionRequests")
+}
+
+enum AdoptionRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
