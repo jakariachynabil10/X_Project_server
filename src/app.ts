@@ -2,7 +2,8 @@ import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 // import httpStatus from 'http-status';
 import globalErrorHandler from './middleware/globalErrorHandler';
-// import router from './routes';
+import router from './routes';
+
 
 
 const app: Application = express();
@@ -19,7 +20,7 @@ app.get('/', (req: Request, res: Response) => {
     })
 });
 
-// app.use('/', router);
+app.use('/', router);
 
 app.use(globalErrorHandler);
 
